@@ -1,4 +1,4 @@
-const CACHE = "pwa-basica-v1";
+const CACHE = "pwa-basica-v2";
 const ARCHIVOS = ["/", "/index.html", "/manifiesto.webmanifest"];
 
 self.addEventListener("install", (e) => {
@@ -16,8 +16,23 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
+  if (e.request.method !== "GET") return;
+
   e.respondWith(
-    fetch(e.request).catch(() => caches.match(e.request).then((r) => r || caches.match("/")))
+    caches.match(e.request).then((respuestaCache) => {
+      // 1) Si existe en caché, úsalo
+      if (respuestaCache) return respuestaCache;
+
+      // 2) Si no está en caché, ve a internet
+      return fetch(e.request)
+        .then((respuestaRed) => {
+          // 3) Guarda una copia en caché para la próxima vez (incluye /assets/*)
+          const copia = respuestaRed.clone();
+          caches.open(CACHE).then((c) => c.put(e.request, copia));
+          return respuestaRed;
+        })
+        .catch(() => caches.match("/") || caches.match("/index.html"));
+    })
   );
 });
 
