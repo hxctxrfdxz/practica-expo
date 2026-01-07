@@ -1,0 +1,20 @@
+{
+  "name": "Notas PWA (Vue)",
+  "short_name": "NotasPWA",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#4f8cff",
+  "icons": [
+    {
+      "src": "/iconos/192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/iconos/512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
